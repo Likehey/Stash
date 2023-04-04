@@ -1,0 +1,175 @@
+subscribe-url: http://your-service-provider
+proxy-providers:
+  订阅连接-1:
+    url: http://your-service-provider
+    interval: 600
+  # 订阅连接-2:
+  #   url: http://your-another-service-provider
+  #   interval: 600
+
+proxy-groups:
+  # 功能分组
+  - name: 代理选择
+    icon: https://raw.githubusercontent.com/Likehey/icon/main/Handpainted/Final.png
+    type: select
+    proxies: &proxies
+      - 自动选择
+      - 手动选择
+      - 香港策略
+      - 台湾策略
+      - 日本策略
+      - 美国策略
+      - 新加坡策略
+
+  - name: 自动选择
+    icon: https://raw.githubusercontent.com/Likehey/icon/main/Handpainted/Buzznet.png
+    interval: 120
+    lazy: true
+    tolerance: 50
+    type: url-test
+    include-all: true
+
+  - name: 手动选择
+    icon: https://raw.githubusercontent.com/Likehey/icon/main/Handpainted/Select.png
+    interval: 120
+    lazy: true
+    type: select
+    include-all: true
+
+  # 基于地区分组
+  - name: 香港策略
+    filter: "港|🇭🇰|HK|(?i)Hong"
+    icon: https://raw.githubusercontent.com/Likehey/icon/main/Handpainted/Hong_Kong.png
+    interval: 120
+    lazy: true
+    tolerance: 50
+    type: url-test
+    include-all: true
+
+  - name: 台湾策略
+    filter: "台|🇨🇳|🇹🇼|湾|TW|(?i)Taiwan"
+    icon: https://raw.githubusercontent.com/Likehey/icon/main/Handpainted/Taiwan.png
+    interval: 120
+    lazy: true
+    tolerance: 50
+    type: url-test
+    include-all: true
+
+  - name: 日本策略
+    filter: "日|🇯🇵|东京|JP|(?i)Japan"
+    icon: https://raw.githubusercontent.com/Likehey/icon/main/Handpainted/Japan.png
+    interval: 120
+    lazy: true
+    tolerance: 50
+    type: url-test
+    include-all: true
+
+  - name: 美国策略
+    filter: "美|🇺🇲|US|(?i)States|American"
+    icon: https://raw.githubusercontent.com/Likehey/icon/main/Handpainted/United_States.png
+    interval: 120
+    lazy: true
+    tolerance: 50
+    type: url-test
+    include-all: true
+
+  - name: 新加坡策略
+    filter: "新加坡|坡|狮城|🇸🇬|SG|(?i)Singapore"
+    icon: https://raw.githubusercontent.com/Likehey/icon/main/Handpainted/Singapore.png
+    interval: 120
+    lazy: true
+    tolerance: 50
+    type: url-test
+    include-all: true
+
+rules:
+- SCRIPT,quic,REJECT
+- RULE-SET,Youtube-rules,代理选择
+- RULE-SET,Spotify-rules,DIRECT
+- RULE-SET,Bilibili-rules,DIRECT
+- RULE-SET,Telegram-rules,代理选择
+- RULE-SET,Twitter-rules,代理选择
+- RULE-SET,Speedtest-rules,代理选择
+- RULE-SET,Apple-rules,DIRECT
+- RULE-SET,Google-rules,代理选择
+- RULE-SET,Microsoft-rules,DIRECT
+- RULE-SET,Mainland-rules,DIRECT
+- RULE-SET,MainlandIP-rules,DIRECT
+- GEOIP,CN,DIRECT
+- MATCH,代理选择
+script:
+  shortcuts:
+    quic: network == 'udp' and dst_port == 443
+dns:
+  default-nameserver:
+    - 114.114.115.115
+    - 119.28.28.28
+    - 223.6.6.6
+    - system
+  nameserver:
+    - https://dns.alidns.com/dns-query
+    - https://doh.pub/dns-query
+log-level: info
+mode: rule
+
+rule-providers:
+  Youtube-rules:
+    behavior: classical
+    interval: 86400
+    name: Youtube
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/YouTube/YouTube.yaml
+  Spotify-rules:
+    behavior: classical
+    interval: 86400
+    name: Spotify
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Spotify/Spotify.yaml
+  Bilibili-rules:
+    behavior: classical
+    interval: 86400
+    name: Bilibili
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/BiliBili/BiliBili.yaml
+  Telegram-rules:
+    behavior: classical
+    interval: 86400
+    name: Telegram
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Telegram/Telegram.yaml
+  Twitter-rules:
+    behavior: classical
+    interval: 86400
+    name: Twitter
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Twitter/Twitter.yaml
+  Speedtest-rules:
+    behavior: classical
+    interval: 86400
+    name: Speedtest
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Speedtest/Speedtest.yaml
+  Apple-rules:
+    behavior: classical
+    interval: 86400
+    name: Apple
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Apple/Apple.yaml
+  Google-rules:
+    behavior: classical
+    interval: 86400
+    name: Google
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Google/Google.yaml
+  Microsoft-rules:
+    behavior: classical
+    interval: 86400
+    name: Microsoft
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Microsoft/Microsoft.yaml
+  Mainland-rules:
+    behavior: classical
+    interval: 86400
+    name: Mainland
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/China/China.yaml
+  MainlandIP-rules:
+    behavior: ipcidr
+    interval: 86400
+    name: MainlandIP
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/ChinaIPs/ChinaIPs_IP.yaml
+  Globle-rules:
+    behavior: classical
+    interval: 86400
+    name: Outside
+    url: https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Global/Global_Classical.yaml
